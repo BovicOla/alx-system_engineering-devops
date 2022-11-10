@@ -1,1 +1,1 @@
-Thi directory contains bash scripts for Loops, conditions and parsing 
+This directory contains bash scripts for Loops, conditions and parsing 
