@@ -1,34 +1,22 @@
 #!/usr/bin/env bash
-# configures an Nginx server to have a custom 404 page that contains the string 'Ceci n'est pas une page'
-sudo apt-get update
-sudo apt-get install -y nginx
+# Configure Nginx
 
-sudo ufw allow "Nginx HTTP"
-sudo chown -R $USER:$USER /var/www/html/index.nginx-debian.html
-sudo mkdir -p /var/www/html
-sudo touch /var/www/html/index.html
-sudo echo "Hello World!" > /var/www/html/index.html
-sudo touch /var/www/html/404.html
-sudo echo "Ceci n'est pas une page" > /var/www/html/404.html
+apt update
+apt install -y nginx
+
+echo "Hello World" > /var/www/html/index.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
 
 printf %s "server {
-    listen 80 default_server;
+    listen 80;
     listen [::]:80 default_server;
-    add_header X-Served-By $81556-web-01;
-    root   /var/www/html;
-    index  index.html index.htm;
+    add_header X-Served-By $HOSTNAME;
+    root /var/www/html;
+    index index.html;
     location /redirect_me {
-        return 301 http://cuberule.com/;
+        return 301 https://www.w3schools.com/JS/js_let.asp;
     }
     error_page 404 /404.html;
-    location /404 {
-      root /var/www/html;
-      internal;
-    }
-}" > /etc/nginx/sites-available/default
-sudo sed -i "s/#add_header/add_header/g" /etc/nginx/nginx.conf
-sudo sed -i "s/X-Served-By.*/X-Served-By $81556-web-01  34.207.189.118;/g" /etc/nginx/nginx.conf
-sudo sed -i "s/X-Served-By.*/X-Served-By $81556-web-02  100.26.20.107;/g" /etc/nginx/nginx.conf
+}" > /etc/nginx/sites-enabled/default
 
-sudo systemctl restart nginx
-
+service nginx restart
